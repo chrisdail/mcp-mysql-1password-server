@@ -1,6 +1,6 @@
 from typing import Any, Dict
 import os
-import MySQLdb
+import pymysql
 from fastmcp.server.context import Context
 from fastmcp.utilities.logging import get_logger
 from fastmcp.exceptions import ToolError
@@ -28,13 +28,13 @@ def run_query(database: str, sql: str) -> Dict[str, Any]:
     logger.info(f'Looking up details for database: {database}')
     db_args = onepssword.get_mysql_db_args(database)
     logger.info(f'Connecting to database: {db_args["host"]}')
-    conn = MySQLdb.connect(**db_args)
+    conn = pymysql.connect(**db_args)
 
     logger.info(f'Running query: {sql}')
     cursor = None
     try:
         # Create dictionary cursor
-        cursor = conn.cursor(MySQLdb.cursors.DictCursor)
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
 
         if READ_ONLY:
             cursor.execute("SET TRANSACTION READ ONLY")

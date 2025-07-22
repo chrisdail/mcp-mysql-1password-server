@@ -4,7 +4,6 @@
 
 - Python 3.10+
 - uv
-- MySQL Server
 - 1Password CLI
 
 
