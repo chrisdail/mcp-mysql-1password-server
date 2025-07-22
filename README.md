@@ -33,8 +33,8 @@ Add this to your MCP Server configuration file:
                 "main.py"
             ],
             "env": {
-                "DB_ENTRIES": "Dev Dashboard DB,Dev Auth DB",
-                "READ_ONLY": "true"
+                "RO_DB_ENTRIES": "Dev Auth DB",
+                "RW_DB_ENTRIES": "Dev Dashboard DB"
            }
         }
     }

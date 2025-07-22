@@ -7,19 +7,18 @@ import mysql_tools
 import onepssword
 
 
-DB_ENTRIES = os.getenv("DB_ENTRIES", "").split(",")
+RO_DB_ENTRIES = os.getenv('RO_DB_ENTRIES', '').split(',') or []
+RW_DB_ENTRIES = os.getenv('RW_DB_ENTRIES', '').split(',') or []
+
 
 @mcp.tool()
-def available_databases() -> list[str]:
-    return DB_ENTRIES
+def available_databases() -> Dict[str, List[str]]:
+    return {
+        'read_only_databases': RO_DB_ENTRIES,
+        'read_write_databases': RW_DB_ENTRIES,
+    }
 
 
-if __name__ == "__main__":
-
-    required_env_vars = ["DB_ENTRIES"]
-    missing = [var for var in required_env_vars if not os.getenv(var)]
-    if missing:
-        print(f"Environment variables are missing: {', '.join(missing)}")
-
-    print("Starting MCP Server")
+if __name__ == '__main__':
+    print('Starting MCP Server')
     mcp.run()
