@@ -1,6 +1,6 @@
 # 1Password-enabled MySQL MCP Server
 
-A Model Context Protocol (MCP) server that provides secure MySQL database access using credentials stored in 1Password. This server allows AI assistants and other MCP clients to query MySQL databases while maintaining security best practices by keeping database credentials in 1Password rather than in configuration files.
+A Model Context Protocol (MCP) server that provides secure MySQL database access using credentials stored in 1Password. This server allows AI assistants and other MCP clients to query MySQL databases while maintaining security best practices by keeping database credentials in 1Password rather than in configuration files. By combining this into a single tool, the AI model does not ever see any passwords.
 
 ## Requirements
 
@@ -38,7 +38,8 @@ uv sync
 
 ### 1. 1Password Configuration
 
-Create database items in 1Password with the following fields:
+Create database items in 1Password using the database type with the following fields:
+
 - `hostname`: MySQL server hostname
 - `username`: MySQL username
 - `password`: MySQL password

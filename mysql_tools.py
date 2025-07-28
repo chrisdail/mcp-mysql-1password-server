@@ -7,15 +7,14 @@ from mcp_server import mcp
 import onepssword
 
 
-RO_DB_ENTRIES = os.getenv('RO_DB_ENTRIES', '').split(',') or []
-RW_DB_ENTRIES = os.getenv('RW_DB_ENTRIES', '').split(',') or []
+RO_DB_ENTRIES = [name.strip() for name in os.getenv('RO_DB_ENTRIES', '').split(',')]
+RW_DB_ENTRIES = [name.strip() for name in os.getenv('RW_DB_ENTRIES', '').split(',')]
 
 logger = get_logger(__name__)
 
 
 def is_safe_query(sql: str) -> bool:
     """Check for potentially unsafe queries"""
-    sql_lower = sql.lower()
     unsafe_keywords = ['INSERT ', 'UPDATE ', 'DELETE ', 'DROP ', 'ALTER ', 'TRUNCATE ', 'CREATE ', 'SET ']
     return not any(keyword in sql.upper() for keyword in unsafe_keywords)
 
@@ -41,7 +40,7 @@ def available_databases() -> Dict[str, List[str]]:
 def sql_query(database: str, sql: str) -> Dict[str, Any]:
     """
     Executes a SQL query on the specified database.
-    The `database` parameter should be one of the databases returned by the `available_databases` tool.
+    The `database` parameter should be one of the ones returned by the `available_databases` tool.
     The `sql` parameter should be a valid SQL query. Add LIMIT 100 to SELECT queries intended to return multipls rows.
     """
 
@@ -50,28 +49,28 @@ def sql_query(database: str, sql: str) -> Dict[str, Any]:
 
     logger.info(f'Looking up details for database: {database}')
     db_args = onepssword.get_mysql_db_args(database)
+
     logger.info(f'Connecting to database: {db_args["host"]}')
     conn = pymysql.connect(**db_args)
 
     logger.info(f'Running query: {sql}')
     cursor = None
     try:
-        # Create dictionary cursor
         cursor = conn.cursor(pymysql.cursors.DictCursor)
 
         if is_read_only_database(database):
             cursor.execute('SET TRANSACTION READ ONLY')
 
         cursor.execute('START TRANSACTION')
-        try:
-            cursor.execute(sql)
-            results = cursor.fetchall()
-            conn.commit()
-            return {'results': results}
-        except Exception as e:
-            conn.rollback()
-            logger.info(f'Error running query: {e}')
-            raise e
+        cursor.execute(sql)
+
+        results = cursor.fetchall()
+        conn.commit()
+        return {'results': results}
+    except Exception as e:
+        conn.rollback()
+        logger.info(f'Error running query: {e}')
+        raise e
     finally:
         if cursor:
             cursor.close()
