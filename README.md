@@ -6,7 +6,7 @@ A Model Context Protocol (MCP) server that provides secure MySQL database access
 
 - Python 3.10+
 - uv (Python package manager)
-- 1Password CLI
+- 1Password Desktop App and 1Password CLI
 - MySQL server access
 
 ## Installation
@@ -38,7 +38,9 @@ uv sync
 
 ### 1. 1Password Configuration
 
-Create database items in 1Password using the database type with the following fields:
+Ensure 1Password CLI access is enabled. Can be enabled by going to Settings -> Developer -> "Integrate with 1Password CLI".
+
+Create database items in 1Password using the `database` type with the following fields:
 
 - `hostname`: MySQL server hostname
 - `username`: MySQL username
