@@ -38,7 +38,11 @@ uv sync
 
 ### 1. 1Password Configuration
 
-Ensure 1Password CLI access is enabled. Can be enabled by going to Settings -> Developer -> "Integrate with 1Password CLI".
+Ensure 1Password CLI access is enabled. Can be enabled by going to Settings -> Developer -> "Integrate with 1Password CLI". You can verify this is installed correctly by running:
+
+```bash
+op vault list
+```
 
 Create database items in 1Password using the `database` type with the following fields:
 
@@ -71,8 +75,8 @@ Add this to your MCP Server configuration file:
                 "main.py"
             ],
             "env": {
-                "RO_DB_ENTRIES": "Dev Auth DB,Production Analytics DB",
-                "RW_DB_ENTRIES": "Dev Dashboard DB,Staging DB"
+                "RO_DB_ENTRIES": "Dev Auth DB",
+                "RW_DB_ENTRIES": "Dev Dashboard DB,Dev Library DB"
             }
         }
     }
